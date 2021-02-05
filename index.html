@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: url(images/bg-image.jpg) no-repeat;
+        background-size: cover;
+        height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <form class="col-md-6 m-auto py-5">
+        <div class="input-group mb-3">
+          <input
+            id="search-city"
+            type="text"
+            class="form-control"
+            placeholder="Enter a location for Weather ..."
+          />
+          <div class="input-group-append">
+            <button id="search-btn" type="button" class="btn btn-danger">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="weather-status text-white text-center">
+        <img id="weather-img" src="https://openweathermap.org/img/wn/02d@2x.png" alt="" width="100" />
+        <h1 id="show-city">Dhaka</h1>
+        <h3><span id="show-temp">38.06</span>&deg;C</h3>
+        <h1 id="show-weather" class="lead">Clouds</h1>
+      </div>
+    </div>
+
+    <!-- Js Here -->
+
+    <script>
+      
+      const showCity =document.getElementById("show-city");
+      const showTemp =document.getElementById("show-temp");
+      const showWeather =document.getElementById("show-weather");
+      const inputValue = document.getElementById("search-city");
+      const weatherImg = document.getElementById("weather-img");
+      const button = document.getElementById("search-btn");
+      
+      button.addEventListener("click", function () {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputValue.value}&appid=e6ae598e5a611537f312b3b9d3240533`)
+          .then((res) => res.json())
+          .then((data) => {
+
+            // Set Icons
+            const iconCode =data.weather[0].icon ; 
+            const icon =  'http://openweathermap.org/img/wn/'+iconCode+'.png';
+            weatherImg.src = icon;
+            
+            // Set City Name
+
+            showCity.innerText = inputValue.value;
+            
+            // Set Temperature
+
+            const getTemp = (data.main.temp) - 273.15;
+            const temp = parseInt(getTemp);
+            showTemp.innerText = temp;
+
+            // Set Weather Type
+
+            showWeather.innerText = data.weather[0].main;
+
+          })
+      });
+    </script>
+  </body>
+</html>
